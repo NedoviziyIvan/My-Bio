@@ -1,20 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Contact me | Lolovilka</title>
+<title>Lolovilka</title>
 <meta name="description" content="Мои официальные соцсети">
 
-<!-- Open Graph -->
+<!-- Иконка сайта во вкладках и на телефонах -->
+<link rel="icon" type="image/png" href="https://github.com/ziyivan.png">
+<link rel="apple-touch-icon" href="https://github.com/ziyivan.png">
+
+<!-- Open Graph превью для ТГ / Дискорда -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Зв'язок зі мною | Lolovilka">
+<meta property="og:title" content="Lolovilka | Contact me">
 <meta property="og:description" content="Мои официальные соцсети">
-<meta property="og:url" content="https://example.com/">
-<meta property="og:image" content="https://example.com/preview.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Зв'язок зі мною | Lolovilka">
-<meta name="twitter:description" content="Мои официальные соцсети">
+<meta property="og:url" content="https://ziyivan.github.io/">
+<meta property="og:image" content="https://github.com/ziyivan.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lolovilka | Contact me">
+<meta name="twitter:image" content="https://github.com/ziyivan.png">
 <meta name="theme-color" content="#FFFFFF">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -337,6 +341,10 @@
   </nav>
 </main>
 
+<!-- Подключение Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
 <script>
   ['touchmove', 'wheel'].forEach(function (evt) {
     document.addEventListener(evt, function (e) { e.preventDefault(); }, { passive: false });
@@ -346,35 +354,49 @@
     btn.addEventListener('touchstart', function () {}, { passive: true });
   });
 
-  // Счётчик всех просмотров сайта (Глазик)
-  const apiNamespace = "lolovilka_site_86";
-  const apiKey = "views";
+  // Твоя настоящая конфигурация Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyAk-dFcweuXQJSK5xYMinDLoabU2FDZZww",
+    authDomain: "lolovilka-site.firebaseapp.com",
+    projectId: "lolovilka-site",
+    storageBucket: "lolovilka-site.firebasestorage.app",
+    messagingSenderId: "706798647797",
+    appId: "1:706798647797:web:6f1c3a7feeea833f4408bc",
+    measurementId: "G-4DJFQ9229D",
+    databaseURL: "https://lolovilka-site-default-rtdb.europe-west1.firebasedatabase.app"
+  };
 
-  fetch(`https://api.counterapi.dev/v1/${apiNamespace}/${apiKey}/up`)
-    .then(response => {
-      // Если счётчик еще не зарегистрирован на сервере API — создаем его
-      if (!response.ok) {
-        return fetch(`https://api.counterapi.dev/v1/${apiNamespace}/${apiKey}/create?initial_value=1`)
-          .then(res => res.json());
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data && data.count !== undefined) {
-        document.getElementById('view-counter').textContent = data.count.toLocaleString();
-      } else {
-        document.getElementById('view-counter').textContent = '1';
-      }
-    })
-    .catch(() => {
-      document.getElementById('view-counter').textContent = '1';
-    });
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  // Онлайн-счётчик (Зелёная точка)
-  function updateOnlineCount() {
-    document.getElementById('online-counter').textContent = '1';
+  // 1. Счётчик ВСЕХ просмотров (Глазик)
+  const viewsRef = db.ref('stats/total_views');
+  
+  if (!sessionStorage.getItem('visited')) {
+    viewsRef.transaction(current => (current || 0) + 1);
+    sessionStorage.setItem('visited', 'true');
   }
-  updateOnlineCount();
+
+  viewsRef.on('value', snapshot => {
+    const val = snapshot.val() || 1;
+    document.getElementById('view-counter').textContent = val.toLocaleString();
+  });
+
+  // 2. Синхронный живой онлайн (Зелёная точка)
+  const connectedRef = db.ref('.info/connected');
+  const myPresenceRef = db.ref('stats/online').push();
+
+  connectedRef.on('value', snap => {
+    if (snap.val() === true) {
+      myPresenceRef.onDisconnect().remove();
+      myPresenceRef.set(true);
+    }
+  });
+
+  db.ref('stats/online').on('value', snap => {
+    const count = snap.numChildren() || 1;
+    document.getElementById('online-counter').textContent = count;
+  });
 </script>
 </body>
 </html>
