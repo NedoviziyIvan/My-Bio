@@ -346,8 +346,19 @@
     btn.addEventListener('touchstart', function () {}, { passive: true });
   });
 
-  fetch('https://api.counterapi.dev/v1/lolovilka_site_86/views/up')
-    .then(response => response.json())
+  // Счётчик всех просмотров сайта (Глазик)
+  const apiNamespace = "lolovilka_site_86";
+  const apiKey = "views";
+
+  fetch(`https://api.counterapi.dev/v1/${apiNamespace}/${apiKey}/up`)
+    .then(response => {
+      // Если счётчик еще не зарегистрирован на сервере API — создаем его
+      if (!response.ok) {
+        return fetch(`https://api.counterapi.dev/v1/${apiNamespace}/${apiKey}/create?initial_value=1`)
+          .then(res => res.json());
+      }
+      return response.json();
+    })
     .then(data => {
       if (data && data.count !== undefined) {
         document.getElementById('view-counter').textContent = data.count.toLocaleString();
@@ -359,6 +370,7 @@
       document.getElementById('view-counter').textContent = '1';
     });
 
+  // Онлайн-счётчик (Зелёная точка)
   function updateOnlineCount() {
     document.getElementById('online-counter').textContent = '1';
   }
