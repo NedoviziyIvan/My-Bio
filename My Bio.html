@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Зв'язок зі мною | Lolovilka</title>
+<meta name="description" content="Мои официальные соцсети">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Зв'язок зі мною | Lolovilka">
+<meta property="og:description" content="Мои официальные соцсети">
+<meta property="og:url" content="https://example.com/">
+<meta property="og:image" content="https://example.com/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Зв'язок зі мною | Lolovilka">
+<meta name="twitter:description" content="Мои официальные соцсети">
+<meta name="theme-color" content="#FFFFFF">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://googleapis.com">
+<link rel="preconnect" href="https://gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    background: #FFFFFF;
+    color: #1A1A1A;
+    font-family: 'Plus Jakarta Sans', 'Inter', 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  main {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Увеличили зазор между элементами, чтобы компенсировать подъем текста */
+    gap: clamp(30px, 8dvh, 70px); 
+    /* Убрали верхний padding, оставив только боковые и нижний безопасный отступ */
+    padding: 0 16px env(safe-area-inset-bottom, 0px);
+  }
+
+  header { 
+    text-align: center; 
+    /* Текст поднимается за счет этого отрицательного отступа. Кнопки при этом не двигаются! */
+    margin-top: -80px; 
+  }
+
+  h1 {
+    font-family: 'Tinos', 'Times New Roman', Times, serif;
+    font-size: clamp(34px, 4.5dvh + 1vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: #1A1A1A;
+  }
+
+  .subtitle {
+    margin-top: clamp(4px, 1dvh, 10px);
+    font-size: clamp(13px, 2.2dvh + 0.3vw, 20px);
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-indent: 0.32em; 
+    color: #1A1A1A;
+    opacity: 0.6;
+  }
+
+  .grid {
+    --gap: clamp(12px, 2.6dvh, 22px);
+    --size: min(40vw, 22dvh, 190px);
+    display: grid;
+    grid-template-columns: repeat(2, var(--size));
+    grid-template-rows: repeat(2, var(--size));
+    gap: var(--gap);
+  }
+
+  /* ---------- Кнопка ---------- */
+  .btn {
+    --brand: #000;
+    position: relative;
+    display: block;
+    width: var(--size);
+    height: var(--size);
+    border-radius: clamp(18px, 3.4dvh, 24px);
+    background: var(--brand);
+    text-decoration: none;
+    color: inherit;
+    outline: none;
+    isolation: isolate;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn.telegram { --brand: #0088cc; }
+  .btn.tiktok   { --brand: #000000; --accent: #00f2fe; }
+  .btn.youtube  { --brand: #FF0000; }
+  .btn.discord  { --brand: #5865F2; }
+
+  .glass {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 45%, rgba(255,255,255,0.78) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,1),
+      inset 0 0 0 1px rgba(255,255,255,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: scale(1);
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0));
+    border-radius: inherit;
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .icon {
+    position: relative;
+    width: 38%;
+    height: 38%;
+    color: #1A1A1A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-12%) scale(1);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+  }
+  .icon svg { width: 100%; height: 100%; fill: currentColor; display: block; }
+
+  .label {
+    position: absolute;
+    left: 0; right: 0;
+    top: 62%;
+    text-align: center;
+    font-size: clamp(10px, 1.7dvh, 13px);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-indent: 0.14em;
+    color: #1A1A1A;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+
+  /* ---------- Hover / Active / Focus ---------- */
+  .btn:hover .glass,
+  .btn:active .glass,
+  .btn:focus-visible .glass {
+    transform: scale(0.92);
+    background: var(--brand);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+  }
+  .btn:hover .glass::before,
+  .btn:active .glass::before,
+  .btn:focus-visible .glass::before { opacity: 0.18; }
+
+  .btn:hover .icon,
+  .btn:active .icon,
+  .btn:focus-visible .icon {
+    transform: translateY(0) scale(1.15);
+    color: #FFFFFF;
+  }
+  .btn.tiktok:hover .icon,
+  .btn.tiktok:active .icon,
+  .btn.tiktok:focus-visible .icon { color: #FFFFFF; filter: drop-shadow(1.5px 1.5px 0 #fe2c55) drop-shadow(-1.5px -1.5px 0 #00f2fe); }
+
+  .btn:hover .label,
+  .btn:active .label,
+  .btn:focus-visible .label {
+    opacity: 0;
+    transform: translateY(-140%);
+  }
+
+  .btn:active { transform: scale(0.98); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn, .glass, .icon, .label, .glass::before { transition-duration: 0.01s; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Зв'язок зі мною:</h1>
+    <p class="subtitle">Lolovilka</p>
+  </header>
+
+  <nav class="grid" aria-label="Социальные сети">
+    <a class="btn telegram" href="https://t.me/Lolovilka_86" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+      <span class="glass">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 15.17l-.39 4.09c.56 0 .8-.24 1.1-.53l2.64-2.5 5.47 4c1 .55 1.71.26 1.98-.92l3.59-16.82h0c.32-1.48-.54-2.06-1.51-1.7L1.57 10.9c-1.44.56-1.42 1.36-.25 1.72l5.4 1.68L19.27 6.4c.59-.39 1.13-.17.69.22L9.78 15.17z"/></svg>
+        </span>
+        <span class="label">TELEGRAM</span>
+      </span>
+    </a>
+
+    <a class="btn tiktok" href="https://www.tiktok.com/@ivan_nedov86?_r=1&_t=ZS-9Ai9G1ZMuou" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+      <span class="glass">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 2h-3.2v13.3a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.2a6.1 6.1 0 1 0 5.2 6.1V8.6a7.6 7.6 0 0 0 4.4 1.4V6.8a4.5 4.5 0 0 1-4.4-4.8z"/></svg>
+        </span>
+        <span class="label">TIKTOK</span>
+      </span>
+    </a>
+
+    <a class="btn youtube" href="https://youtube.com/@lolovilka_86?si=GDTvlreVzEGrGUl3" target="_blank" rel="noopener noreferrer" aria-label="Youtube">
+      <span class="glass">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>
+        </span>
+        <span class="label">YOUTUBE</span>
+      </span>
+    </a>
+
+    <a class="btn discord" href="https://discord.gg/eCrpgJNJWd" target="_blank" rel="noopener noreferrer" aria-label="Discord">
+      <span class="glass">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.5a18.3 18.3 0 0 0-6.4 0L8.6 3a19.7 19.7 0 0 0-4.9 1.4C.6 9 -.3 13.5.1 18a19.9 19.9 0 0 0 6 3l1.3-2.1a12.8 12.8 0 0 1-2-.9l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4c-.6.4-1.3.7-2 .9l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.9-9.7-3.6-13.6zM8.3 15.3c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.1 1.1 2.1 2.4-.9 2.4-2.1 2.4zm7.4 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.1 1.1 2.1 2.4-.9 2.4-2.1 2.4z"/></svg>
+        </span>
+        <span class="label">DISCORD</span>
+      </span>
+    </a>
+  </nav>
+</main>
+
+<script>
+  ['touchmove', 'wheel'].forEach(function (evt) {
+    document.addEventListener(evt, function (e) { e.preventDefault(); }, { passive: false });
+  });
+
+  document.querySelectorAll('.btn').forEach(function (btn) {
+    btn.addEventListener('touchstart', function () {}, { passive: true });
+  });
+</script>
+</body>
+</html>
+
