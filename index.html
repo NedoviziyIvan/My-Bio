@@ -143,7 +143,11 @@
   .online-dot::after {
     content: '';
     position: absolute;
-    inset: -3px;
+    width: 14px;
+    height: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     border-radius: 50%;
     background-color: rgba(34, 197, 94, 0.45);
     animation: pulse-dot 5.3s infinite ease-in-out;
